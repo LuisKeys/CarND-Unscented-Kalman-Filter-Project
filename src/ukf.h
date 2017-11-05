@@ -91,7 +91,23 @@ public:
    * @param Xsig_out Augmented sigma points buffer
    */
   void AugmentedSigmaPoints(MatrixXd* Xsig_out);
-  
+
+  /**
+   * PredictSigmaPoints
+   * @param Xsig_aug Augmented sigma points buffer
+   * @param Xsig_pred_out Predicted sigma points buffer
+   * @param delta_t Delta time
+   */
+  void PredictSigmaPoints(MatrixXd Xsig_aug, MatrixXd* Xsig_pred_out, double  delta_t);
+
+  /**
+   * PredictMeanAndCovariance
+   * @param Xsig_pred Augmented sigma points buffer
+   * @param x_out Predicted state
+   * @param P_out Predicted state covariance
+   */
+  void PredictMeanAndCovariance();
+
   /**
    * Init
    * @param meas_package The latest measurement data of either radar or laser
