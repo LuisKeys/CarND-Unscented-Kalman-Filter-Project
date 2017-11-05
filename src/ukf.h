@@ -76,9 +76,21 @@ public:
   ///* Augmented columns
   int n_2_aug_plus_1_;
 
-  /**
+  ///* Current NIS for radar
+  double NIS_radar_;
+
+  ///* Current NIS for laser
+  double NIS_lidar_;
+    /**
    * Constructor
    */
+
+  ///* Radar measurement noise covariance matrix
+  MatrixXd R_radar_;
+  
+  ///* Lidar measurement noise covariance matrix
+  MatrixXd R_lidar_;
+    
   UKF();
 
   /**
@@ -109,6 +121,13 @@ public:
   void PredictMeanAndCovariance();
 
   /**
+   * Anglenormalization
+   * @param {double*} angle The angle to be normalized
+   * either radar or laser.
+   */
+  void Anglenormalization(double *angle);
+
+  /**
    * Init
    * @param meas_package The latest measurement data of either radar or laser
    */
@@ -126,6 +145,14 @@ public:
    * @param delta_t Time between k and k+1 in s
    */
   void Prediction(double delta_t);
+
+  /**
+   * UpdateUKF
+   * @param meas_package The measurement at k+1
+   * @param n_z Device dimensions
+   * @param Zsig Sigma points in meassure space
+   */
+  void UpdateUKF(MeasurementPackage meas_package, int n_z, MatrixXd Zsig);
 
   /**
    * Updates the state and the state covariance matrix using a laser measurement
