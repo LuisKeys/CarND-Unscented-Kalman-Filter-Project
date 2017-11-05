@@ -67,6 +67,14 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  ///* Previous time stamp to get delta time
+  long previous_timestamp_;
+
+  ///* Delta Time
+  float dt_;
+
+  ///* Augmented columns
+  int n_2_aug_plus_1_;
 
   /**
    * Constructor
@@ -77,6 +85,18 @@ public:
    * Destructor
    */
   virtual ~UKF();
+
+  /**
+   * AugmentedSigmaPoints
+   * @param Xsig_out Augmented sigma points buffer
+   */
+  void AugmentedSigmaPoints(MatrixXd* Xsig_out);
+  
+  /**
+   * Init
+   * @param meas_package The latest measurement data of either radar or laser
+   */
+  void InitFilter(MeasurementPackage meas_package);
 
   /**
    * ProcessMeasurement
