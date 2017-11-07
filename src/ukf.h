@@ -13,6 +13,8 @@ using Eigen::VectorXd;
 class UKF {
 public:
 
+  const double small_number = 0.0001;
+
   ///* initially set to false, set to true in first call of ProcessMeasurement
   bool is_initialized_;
 

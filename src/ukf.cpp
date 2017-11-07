@@ -27,10 +27,10 @@ UKF::UKF() {
   P_ = MatrixXd(n_x_, n_x_);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 2.0;
+  std_a_ = 1.5;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 2.0;
+  std_yawdd_ = 0.8;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -128,11 +128,11 @@ void UKF::InitFilter(MeasurementPackage meas_package) {
       x_ << meas_package.raw_measurements_[0], meas_package.raw_measurements_[1], 
             0, 0, 0;
 
-      if (fabs(x_(0)) < 0.0001)
-        x_(0) = 0.001;
+      if (fabs(x_(0)) < small_number)
+        x_(0) = 0.01;
 
-      if (fabs(x_(1)) < 0.0001)
-        x_(1) = 0.001;
+      if (fabs(x_(1)) < small_number)
+        x_(1) = 0.01;
     }
 
     //Initi state covariance with Identity matrix
@@ -225,7 +225,7 @@ void UKF::Prediction(double delta_t) {
     double px_p, py_p;
 
     //Manage division by zero
-    if (fabs(yawd) > 0.0001) { 
+    if (fabs(yawd) > small_number) { 
         double v_yawd = v / yawd;
         px_p = p_x + v_yawd * (sin(arg) - sin_yaw);
         py_p = p_y + v_yawd * (cos_yaw - cos(arg) );
