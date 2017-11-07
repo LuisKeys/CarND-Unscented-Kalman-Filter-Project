@@ -85,11 +85,20 @@ public:
    * Constructor
    */
 
+  ///* Radar dimensions
+  int n_radar_ = 3;
+
+  ///* Lidar dimensions
+  int n_lidar_ = 2;
+
   ///* Radar measurement noise covariance matrix
   MatrixXd R_radar_;
   
   ///* Lidar measurement noise covariance matrix
   MatrixXd R_lidar_;
+
+  ///* Square root of Lamda + n_aug
+  double sqrt_lamb_plus_n_aug_;
     
   UKF();
 
@@ -98,33 +107,6 @@ public:
    */
   virtual ~UKF();
 
-  /**
-   * AugmentedSigmaPoints
-   * @param Xsig_out Augmented sigma points buffer
-   */
-  void AugmentedSigmaPoints(MatrixXd* Xsig_out);
-
-  /**
-   * PredictSigmaPoints
-   * @param Xsig_aug Augmented sigma points buffer
-   * @param Xsig_pred_out Predicted sigma points buffer
-   * @param delta_t Delta time
-   */
-  void PredictSigmaPoints(MatrixXd Xsig_aug, MatrixXd* Xsig_pred_out, double  delta_t);
-
-  /**
-   * PredictMeanAndCovariance
-   * @param Xsig_pred Augmented sigma points buffer
-   * @param x_out Predicted state
-   * @param P_out Predicted state covariance
-   */
-  void PredictMeanAndCovariance();
-
-  /**
-   * Anglenormalization
-   * @param {double*} angle The angle to be normalized
-   * either radar or laser.
-   */
   void Anglenormalization(double *angle);
 
   /**
