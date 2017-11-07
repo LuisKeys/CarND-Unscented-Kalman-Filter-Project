@@ -27,10 +27,10 @@ UKF::UKF() {
   P_ = MatrixXd(n_x_, n_x_);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 1.5;
+  std_a_ = 0.8;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.8;
+  std_yawdd_ = 0.6;
 
   // Laser measurement noise standard deviation position1 in m
   std_laspx_ = 0.15;
@@ -57,13 +57,13 @@ UKF::UKF() {
   Xsig_pred_ = MatrixXd(n_x_, n_2_aug_plus_1_);
   Xsig_pred_.setZero();
 
+  ///* Sigma point spreading parameter
+  lambda_ = 3 - n_aug_; 
+
   ///* Weights of sigma points
   weights_ = VectorXd(n_2_aug_plus_1_);;
   weights_.fill(0.5 / (lambda_ + n_aug_));
   weights_(0) = lambda_ / (lambda_ + n_aug_);
-
-  ///* Sigma point spreading parameter
-  lambda_ = 3 - n_aug_; 
 
   double std_radr_2 = std_radr_ * std_radr_;
   double std_radphi_2 = std_radphi_ * std_radphi_;
@@ -144,6 +144,12 @@ void UKF::InitFilter(MeasurementPackage meas_package) {
  * either radar or laser.
  */
 void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
+  
+  if(meas_package.raw_measurements_.squaredNorm() < small_number)
+  {
+    meas_package.raw_measurements_.fill(0.001);
+  }
+
   //Init if not yet initialized
   if(!is_initialized_) {
     //Initialize with first meassure
