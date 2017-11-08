@@ -130,9 +130,13 @@ int main()
 
     	  VectorXd RMSE = tools.CalculateRMSE(estimations, ground_truth);
 
-          for(int i = 0; i < 4; ++i)
+          for(int i = 0; i < 4; ++i) {
             if(isnan(RMSE(i)))
               RMSE(i) = 0.0;
+
+            if(RMSE(i) > 100)
+              RMSE(i) = 0.01;
+          }
 
           json msgJson;
           msgJson["estimate_x"] = p_x;

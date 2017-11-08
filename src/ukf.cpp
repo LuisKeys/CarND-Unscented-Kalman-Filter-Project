@@ -164,6 +164,9 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
   dt_ = ((float)(meas_package.timestamp_ - previous_timestamp_)) / 1000000.0;
   previous_timestamp_ = meas_package.timestamp_;  
 
+  if(dt_ < small_number)
+    dt_ = 0.01;
+
   Prediction(dt_);
 
   if (meas_package.sensor_type_ == MeasurementPackage::RADAR) {
